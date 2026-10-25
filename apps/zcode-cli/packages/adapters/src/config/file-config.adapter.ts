@@ -60,6 +60,14 @@ export interface PluginRemovePatchResult {
 
 const DEFAULT_CONFIG_FILE = "config.json";
 const DEFAULT_BASE_DIR = "~/.zcode/cli";
+/**
+ * 运行时环境变量：覆盖用户配置文件路径（默认 `~/.zcode/cli/config.json`）。
+ *
+ * 嵌入方（把 CLI 当执行层跑的二次集成）需要自己的一份配置——例如声明
+ * `plugins.suppressedBuiltins` 关掉只属于上游客户端的官方插件——而不该写进
+ * 用户自己的 ZCode 配置里。
+ */
+export const USER_CONFIG_PATH_ENV = "ZCODE_USER_CONFIG";
 
 /**
  * Resolve path with ~ expansion
@@ -72,15 +80,24 @@ export function resolvePath(path: string): string {
 }
 
 /**
+ * 用户配置文件路径：环境变量优先，其次默认位置。
+ */
+export function resolveUserConfigPath(): string {
+  const override =
+    typeof process !== "undefined" ? process.env[USER_CONFIG_PATH_ENV]?.trim() : undefined;
+  if (override) return resolvePath(override);
+  return join(resolvePath(DEFAULT_BASE_DIR), DEFAULT_CONFIG_FILE);
+}
+
+/**
  * Load configuration from a JSON file
  */
 export function loadFileConfig(filePath?: string, options: FileConfigOptions = {}): LoadedConfig {
   const resolvedPath = filePath
     ? resolvePath(filePath)
-    : join(
-        resolvePath(options.baseDir ?? DEFAULT_BASE_DIR),
-        options.configFileName ?? DEFAULT_CONFIG_FILE,
-      );
+    : options.baseDir
+      ? join(resolvePath(options.baseDir), options.configFileName ?? DEFAULT_CONFIG_FILE)
+      : resolveUserConfigPath();
 
   if (!existsSync(resolvedPath)) {
     return {
@@ -441,7 +458,7 @@ export async function removeSuppressedBuiltinInFileConfig(
  * Get default config file path
  */
 export function getDefaultConfigPath(): string {
-  return join(resolvePath(DEFAULT_BASE_DIR), DEFAULT_CONFIG_FILE);
+  return resolveUserConfigPath();
 }
 
 /**

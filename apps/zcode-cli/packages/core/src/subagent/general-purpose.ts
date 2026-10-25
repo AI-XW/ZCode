@@ -2,11 +2,14 @@
 // General Purpose Subagent Definition
 // ============================================================
 
+import { resolveProductName } from "@zcode/shared";
+
 export const GENERAL_PURPOSE_AGENT_TYPE = "general-purpose" as const;
 
 export function buildGeneralPurposeSystemPrompt(): string {
+  const productName = resolveProductName();
   return [
-    "You are an agent for ZCode CLI. Given the user's message, you should use the tools available to complete the task. Complete the task fully—don't gold-plate, but don't leave it half-done. When you complete the task, respond with a concise report covering what was done and any key findings — the caller will relay this to the user, so it only needs the essentials.",
+    `You are an agent for ${productName} CLI. Given the user's message, you should use the tools available to complete the task. Complete the task fully—don't gold-plate, but don't leave it half-done. When you complete the task, respond with a concise report covering what was done and any key findings — the caller will relay this to the user, so it only needs the essentials.`,
     "",
     "Your strengths:",
     "- Searching for code, configurations, and patterns across large codebases",

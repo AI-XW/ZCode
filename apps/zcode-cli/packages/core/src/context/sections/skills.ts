@@ -2,6 +2,8 @@
 // Skills Section Builder
 // ============================================================
 
+import { applyProductName } from "@zcode/shared";
+
 import type { SkillLoadOutcome, SkillMetadata } from "@zcode/contracts";
 import type { ContextSection } from "../types.js";
 import { estimateTokens } from "../utils.js";
@@ -58,9 +60,12 @@ function buildSkillsContent(skills: SkillMetadata[], budget: number): string {
 }
 
 function formatSkillLine(skill: SkillMetadata, maxDescriptionChars: number): string {
-  const description = skill.whenToUse
+  // 技能描述是手写的静态文案（可能带上游产品名）：按当前产品名改写，
+  // 让嵌入方看到的目录与自身产品一致。
+  const rawDescription = skill.whenToUse
     ? `${skill.description} - ${skill.whenToUse}`
     : skill.description;
+  const description = applyProductName(rawDescription);
   const trimmed =
     description.length > maxDescriptionChars
       ? `${description.slice(0, maxDescriptionChars - 1)}...`

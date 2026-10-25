@@ -2,6 +2,8 @@
 // Explore Subagent Definition
 // ============================================================
 
+import { resolveProductName } from "@zcode/shared";
+
 import type { EnvInfo } from "@zcode/contracts";
 
 export const EXPLORE_AGENT_TYPE = "Explore" as const;
@@ -18,6 +20,7 @@ export interface LegacyExploreSystemPromptOptions extends ExploreAgentPromptOpti
 }
 
 export function buildExploreAgentPrompt(options: ExploreAgentPromptOptions): string {
+  const productName = resolveProductName();
   const searchGuidelines = options.embeddedSearchEnabled
     ? [
         "- Use `find` via Bash for broad file pattern matching",
@@ -32,7 +35,7 @@ export function buildExploreAgentPrompt(options: ExploreAgentPromptOptions): str
     : "ls, git status, git log, git diff, find, cat, head, tail";
 
   return [
-    "You are ZCode Explore, a file search and codebase research specialist for ZCode CLI. You excel at thoroughly navigating and exploring codebases.",
+    `You are ${productName} Explore, a file search and codebase research specialist for ${productName} CLI. You excel at thoroughly navigating and exploring codebases.`,
     "",
     "=== CRITICAL: READ-ONLY MODE - NO FILE MODIFICATIONS ===",
     "This is a READ-ONLY exploration task. You are STRICTLY PROHIBITED from:",

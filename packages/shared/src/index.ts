@@ -36,6 +36,13 @@ export type {
 export type { WorkspacePurpose } from "./workspacePurpose.js";
 export { DEFAULT_LOCALE } from "./protocol.js";
 export { ZCODE_VERSION, ZCODE_COMMIT, ZCODE_BUILD_TIME } from "./version.js";
+export {
+  DEFAULT_PRODUCT_NAME,
+  ZCODE_PRODUCT_NAME_ENV_KEY,
+  applyProductName,
+  normalizeProductName,
+  resolveProductName,
+} from "./productName.js";
 export type { HelloMessage, HelloAckMessage } from "./handshake.js";
 export type { ArmsRumEnv, ZCodeEnv, ZCodeProductFlavor } from "./env.js";
 export type { RemoteAssetInstallMode } from "./remoteAssetInstallMode.js";

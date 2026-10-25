@@ -1,12 +1,15 @@
+import { resolveProductName } from "@zcode/shared";
+
 import type { ContextSection } from "../types.js";
 import { estimateTokens } from "../utils.js";
 
 export function buildDesktopContextSection(genUiOutputDirectory?: string): ContextSection {
+  const productName = resolveProductName();
   return createDesktopSection(
-    "ZCode Desktop Context",
+    `${productName} Desktop Context`,
     "desktop_context",
     [
-      "# ZCode Desktop Context",
+      `# ${productName} Desktop Context`,
       "",
       "### Interactive views",
       ...(genUiOutputDirectory

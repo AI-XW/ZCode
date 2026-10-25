@@ -1,3 +1,5 @@
+import { resolveProductName } from "@zcode/shared";
+
 import type {
   WorkflowGraphCollection,
   WorkflowGraphNode,
@@ -14,7 +16,7 @@ export function buildDefaultNodePrompt(
     .map((artifact) => `- ${artifact.label}: ${artifact.path}`)
     .join("\n");
   return [
-    `You are running a ZCode workflow node for phase: ${phase}.`,
+    `You are running a ${resolveProductName()} workflow node for phase: ${phase}.`,
     `Workflow run: ${snapshot.runId}`,
     `Working directory: ${snapshot.cwd}`,
     "",
@@ -49,7 +51,7 @@ export function buildDefaultPlannerPrompt(
     )
     .join("\n");
   return [
-    `You are running a ZCode workflow exploration planner for phase: ${phase}.`,
+    `You are running a ${resolveProductName()} workflow exploration planner for phase: ${phase}.`,
     `Workflow run: ${snapshot.runId}`,
     `Working directory: ${snapshot.cwd}`,
     "",
